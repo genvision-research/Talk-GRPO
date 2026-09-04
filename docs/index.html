@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talk-GRPO</title>
+
+  <!-- Optional: use a Google Font. You can remove this line for offline usage. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --heading: #111827;
+      --line: #e5e7eb;
+      --card: #f9fafb;
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --radius: 18px;
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover {
+      color: var(--accent-dark);
+      text-decoration: underline;
+    }
+
+    .container {
+      width: min(100% - 32px, var(--max-width));
+      margin: 0 auto;
+    }
+
+    header.hero {
+      padding: 54px 0 28px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(37, 99, 235, 0.12), transparent 32%),
+        radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.12), transparent 32%),
+        linear-gradient(180deg, #f8fbff 0%, #ffffff 78%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .venue {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 13px;
+      margin-bottom: 18px;
+      border: 1px solid #dbeafe;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 auto 14px;
+      max-width: 100%;
+      color: var(--heading);
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.08;
+      letter-spacing: -1.4px;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      max-width: 900px;
+      margin: 0 auto 20px;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.55;
+    }
+
+    .authors {
+      margin: 18px auto 8px;
+      color: #374151;
+      font-size: 17px;
+    }
+
+    .affiliation {
+      margin: 4px auto 24px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 22px 0 10px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 116px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #111827;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .button:hover {
+      color: white;
+      background: #000000;
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    nav a {
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    nav a:hover {
+      background: #f3f4f6;
+      text-decoration: none;
+    }
+
+     section {
+      padding: 46px 0 0;
+      border-bottom: none;
+    }
+
+    section .container {
+      padding-bottom: 46px;
+    }
+
+    section:not(:last-of-type) .container {
+      border-bottom: 2px solid var(--line);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      color: var(--heading);
+      font-size: clamp(26px, 3vw, 36px);
+      line-height: 1.2;
+      letter-spacing: -0.6px;
+    }
+
+    h3 {
+      margin: 28px 0 14px;
+      color: var(--heading);
+      font-size: 21px;
+    }
+
+    .section-lead {
+      max-width: 100%;
+      color: var(--muted);
+      font-size: 17px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .teaser {
+      margin-top: 34px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #000;
+      box-shadow: var(--shadow);
+    }
+
+    video, img {
+      width: 100%;
+      display: block;
+    }
+
+    .caption {
+      padding: 10px 14px;
+      color: var(--muted);
+      background: #f9fafb;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .abstract-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.035);
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.four {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.04);
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .card-title {
+      margin: 0 0 6px;
+      color: var(--heading);
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .card-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+
+    .method-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .method-item {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      text-align: center;
+    }
+
+    .method-item strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--heading);
+      font-size: 16px;
+    }
+
+    .method-item span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .result-group {
+      margin-top: 32px;
+    }
+
+    .video-title {
+      margin: 0;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--heading);
+      font-weight: 800;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .compare-row {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .input-image {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.04);
+    }
+
+    .bibtex {
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: var(--radius);
+      background: #0f172a;
+      color: #e5e7eb;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    footer {
+      padding: 34px 0 48px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+      border-top: 1px solid var(--line);
+      background: #f9fafb;
+    }
+
+    @media (max-width: 860px) {
+      .grid.two,
+      .grid.three,
+      .grid.four,
+      .method-list,
+      .compare-row {
+        grid-template-columns: 1fr;
+      }
+
+      header.hero {
+        padding-top: 36px;
+      }
+
+      section {
+        padding: 34px 0;
+      }
+    }
+
+    .pipeline-img {
+      max-width: 780px;   /* chỉnh số này để ảnh nhỏ/lớn hơn */
+      margin: 0 auto;     /* căn giữa */
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .pipeline-img img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .video-card-small {
+      max-width: 280px;
+      margin: 0 auto;
+    }
+    .grid.seven {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .grid.seven .caption {
+      font-size: 12px;
+      padding: 6px 4px;
+    }
+
+    @media (max-width: 1000px) {
+      .grid.seven {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid.seven {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: center;   /* căn giữa các item */
+      align-items: center;
+      overflow-x: auto;
+      gap: 8px;
+      padding: 10px 0;
+      white-space: nowrap;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: none;
+      border-top: none;
+    }
+
+    nav .container {
+      width: max-content;
+      max-width: calc(100% - 32px);
+      margin: 0 auto;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 0;
+      white-space: nowrap;
+      overflow-x: auto;
+
+      border-bottom: 2px solid var(--line);
+      border-top: 2px solid var(--line);
+    }
+
+    header.hero {
+      padding: 54px 0 28px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(37, 99, 235, 0.12), transparent 32%),
+        radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.12), transparent 32%),
+        linear-gradient(180deg, #f8fbff 0%, #ffffff 78%);
+
+      border-bottom: none;
+    }
+     .title-highlight {
+      color: #eb25b3;
+    } 
+
+    nav a.active {
+      color: #007bff;
+      background: rgba(0, 123, 255, 0.08);
+    }
+
+    section {
+      scroll-margin-top: 60px;
+    }
+
+    .qualitative-two-col {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .qualitative-group {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .qualitative-group .input-image,
+    .qualitative-group .qualitative-video-card {
+      width: 100%;
+    }
+
+    .qualitative-group .input-image img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .qualitative-group .qualitative-video-card video {
+      width: 100%;
+      display: block;
+    }
+
+    @media (max-width: 900px) {
+      .qualitative-two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .qualitative-group {
+        grid-template-columns: 1fr;
+      }
+    }
+    .qualitative-group .caption,
+    .qualitative-group .video-title {
+      margin: 0;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qualitative-group .input-image img,
+    .qualitative-group .qualitative-video-card video {
+      display: block;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="container">
+
+      <h1><span class="title-highlight">Talk-GRPO</span>: Post-Training Talking-Face Generation via Landmark-Guided GRPO without Learned Synchronization Models</h1>
+
+      <div class="authors">
+        <a href="#">Anonymous Authors</a>
+      </div>
+
+      <div class="link-row">
+        <a class="button" href="#">Paper</a>
+        <a class="button" href="#">Code</a>
+      </div>
+
+      <div class="teaser">
+        <video controls muted loop playsinline>
+          <source src="assets/teaser.mp4" type="video/mp4"/>
+          Your browser does not support the video tag.
+        </video>
+        <div class="caption">
+          Teaser video: representative examples of our talking-face generation results.
+        </div>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <div class="container">
+      <a class="nav-link" href="#abstract">Abstract</a>
+      <a class="nav-link" href="#pipeline">Pipeline Overview</a>
+      <a class="nav-link" href="#results">Test Videos</a>
+      <a class="nav-link" href="#inputs">Reference Images</a>
+      <a class="nav-link" href="#qualitative">Qualitative Results</a>
+      <a class="nav-link" href="#bibtex">BibTeX</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="abstract">
+      <div class="container">
+        <h2>Abstract</h2>
+        <div class="abstract-box">
+          <p>
+            Talking-face generation has recently advanced with diffusion-based frameworks. However, these models are commonly optimized with reconstruction objectives, which mainly improve visual quality rather than directly enhancing audio-lip synchronization. Existing methods often address this issue by introducing learned synchronization networks such as SyncNet. Although effective, such auxiliary networks are difficult to train and often provide black-box reward signals. In addition, this issue is more critical in diffusion-based generation, where facial details are still unclear and unreliable at early denoising steps. As a result, applying audio–lip synchronization supervision during these steps may introduce noisy guidance and degrade generation quality.
+          </p>
+          <p>
+            Motivated by these limitations, we propose <strong>Talk-GRPO</strong>, a post-training framework that formulates talking-face generation as a policy optimization problem and applies Group Relative Policy Optimization to optimize synchronization-oriented rewards at the final generation stage. Instead of relying on learned synchronization reward networks, Talk-GRPO uses lightweight and interpretable geometric cues derived from MediaPipe facial landmarks to construct a non-differentiable reward for audio-aware lip motion alignment. This design enables transparent reward computation and avoids black-box synchronization models. Experiments on multiple datasets demonstrate that Talk-GRPO consistently improves audio-lip synchronization for models with and without audio-lip synchronization losses, while preserving facial structure and temporal consistency.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="pipeline">
+      <div class="container">
+        <h2>Pipeline Overview</h2>
+
+        <div class="pipeline-img">
+          <img src="assets/pipeline.png" alt="Pipeline overview figure" />
+        </div>
+
+        <div class="method-list">
+          <div class="method-item">
+            <strong>1. Group Generation</strong>
+            <span>
+              Given the same reference image, landmark condition, and driving audio,
+              the generator samples a group of candidate.
+            </span>
+          </div>
+
+          <div class="method-item">
+            <strong>2. Reward Computation</strong>
+            <span>
+              Landmarks are extracted from the final outputs to compute
+              geometry-based rewards for mouth alignment and visual preservation.
+            </span>
+          </div>
+
+          <div class="method-item">
+            <strong>3. Two-Stage Post-Training</strong>
+            <span>
+              Stage 1 applies GRPO with group-relative rewards, while Stage 2 refines
+              Temporal-Attention modules to improve consistency.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="container">
+        <h2>Test Videos</h2>
+        <p class="section-lead">
+          We show representative results on MEAD for in-domain testing and on the unseen HDTF and CREMA-D datasets for cross-dataset robustness evaluation. Each video is generated using landmarks as structural driving conditions and audio for mouth motion.
+        </p>
+
+        
+        <div class="result-group">
+          <h3>Results on MEAD</h3>
+
+          <div class="grid four">
+            
+            <div class="card video-card-small">
+              <p class="video-title">MEAD Example 1</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/mead_01.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <div class="card video-card-small">
+              <p class="video-title">MEAD Example 2</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/mead_02.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <div class="card video-card-small">
+              <p class="video-title">MEAD Example 3</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/mead_03.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <div class="card video-card-small">
+              <p class="video-title">MEAD Example 4</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/mead_04.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="result-group">
+          <h3>Results on HDTF</h3>
+
+          <div class="grid four">
+            
+            <div class="card video-card-small">
+              <p class="video-title">HDTF Example 1</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/hdtf_01.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <div class="card video-card-small">
+              <p class="video-title">HDTF Example 2</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/hdtf_02.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <div class="card video-card-small">
+              <p class="video-title">HDTF Example 3</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/hdtf_03.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <div class="card video-card-small">
+              <p class="video-title">HDTF Example 4</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/hdtf_04.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="result-group">
+          <h3>Results on CREMA-D</h3>
+
+          <div class="grid four">
+            
+            <div class="card video-card-small">
+              <p class="video-title">CREMA-D Example 1</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/cremad_01.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <div class="card video-card-small">
+              <p class="video-title">CREMA-D Example 2</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/cremad_02.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <div class="card video-card-small">
+              <p class="video-title">CREMA-D Example 3</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/cremad_03.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <div class="card video-card-small">
+              <p class="video-title">CREMA-D Example 4</p>
+              <video controls muted loop playsinline>
+                <source src="test_videos/cremad_04.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </section>
+    </section>
+
+    <section id="inputs">
+      <div class="container">
+        <h2>Reference Images</h2>
+        <p class="section-lead">
+          We present the reference portraits used for qualitative visualization.
+        </p>
+
+        <div class="grid seven">
+          
+          <div class="input-image">
+            <img src="images/01.png" alt="Input reference image 1" />
+            <div class="caption">Input Image 1</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/02.png" alt="Input reference image 2" />
+            <div class="caption">Input Image 2</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/03.png" alt="Input reference image 3" />
+            <div class="caption">Input Image 3</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/04.png" alt="Input reference image 4" />
+            <div class="caption">Input Image 4</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/05.png" alt="Input reference image 5" />
+            <div class="caption">Input Image 5</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/06.png" alt="Input reference image 6" />
+            <div class="caption">Input Image 6</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/07.png" alt="Input reference image 7" />
+            <div class="caption">Input Image 7</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/08.png" alt="Input reference image 8" />
+            <div class="caption">Input Image 8</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/09.png" alt="Input reference image 9" />
+            <div class="caption">Input Image 9</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/10.png" alt="Input reference image 10" />
+            <div class="caption">Input Image 10</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/11.png" alt="Input reference image 11" />
+            <div class="caption">Input Image 11</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/12.png" alt="Input reference image 12" />
+            <div class="caption">Input Image 12</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/13.png" alt="Input reference image 13" />
+            <div class="caption">Input Image 13</div>
+          </div>
+          
+          <div class="input-image">
+            <img src="images/14.png" alt="Input reference image 14" />
+            <div class="caption">Input Image 14</div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section id="qualitative">
+      <div class="container">
+        <h2>Qualitative Results</h2>
+        <p class="section-lead">
+          We show qualitative examples with the reference image on the left and concatenated visualization videos on the right, illustrating the driving motion and generated talking-face results.
+        </p>
+
+        <div class="qualitative-two-col">
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/01.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_01.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/02.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_02.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/03.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_03.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/04.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_04.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/05.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_05.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/06.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_06.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/07.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_07.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/08.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_08.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/09.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_09.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/10.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_10.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/11.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_11.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/12.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_12.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/13.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_13.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">Reference Image</div>
+              <img src="images/14.png" alt="Reference input image" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">Example</p>
+              <video controls muted loop playsinline>
+                <source src="qualitative_results/visual_14.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section id="bibtex">
+      <div class="container">
+        <h2>BibTeX</h2>
+        <pre class="bibtex"><code>@article{talkgrpo2026,
+          title={Talk-GRPO: Post-Training Talking-Face Generation via Landmark-Guided GRPO without Learned Synchronization Models},
+          author={Anonymous Authors},
+          journal={arXiv},
+          year={2026}
+        }</code></pre>
+      </div>
+    </section>
+  </main>
+  <script>
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const currentId = entry.target.getAttribute("id");
+
+            navLinks.forEach(link => {
+              link.classList.remove("active");
+
+              if (link.getAttribute("href") === `#${currentId}`) {
+                link.classList.add("active");
+              }
+            });
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "-40% 0px -55% 0px",
+        threshold: 0
+      }
+    );
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>
