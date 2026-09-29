@@ -1,6 +1,6 @@
 <div align="center">
 
-# Talk-GRPO: Post-Training Talking-Face Generation via Landmark-Guided GRPO without Learned Synchronization Models
+# Talk-GRPO: Landmark-Conditioned GRPO Post-Training for Talking-Face Generation
 
 **Anonymous Authors**
 

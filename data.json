@@ -139,38 +139,10 @@
     },
     {
       "ref_caption": "Reference Image",
-      "ref_src": "images/02.png",
-      "ref_alt": "Reference input image",
-      "video_title": "Example",
-      "video_src": "qualitative_results/visual_02.mp4"
-    },
-    {
-      "ref_caption": "Reference Image",
       "ref_src": "images/03.png",
       "ref_alt": "Reference input image",
       "video_title": "Example",
       "video_src": "qualitative_results/visual_03.mp4"
-    },
-    {
-      "ref_caption": "Reference Image",
-      "ref_src": "images/04.png",
-      "ref_alt": "Reference input image",
-      "video_title": "Example",
-      "video_src": "qualitative_results/visual_04.mp4"
-    },
-    {
-      "ref_caption": "Reference Image",
-      "ref_src": "images/05.png",
-      "ref_alt": "Reference input image",
-      "video_title": "Example",
-      "video_src": "qualitative_results/visual_05.mp4"
-    },
-    {
-      "ref_caption": "Reference Image",
-      "ref_src": "images/06.png",
-      "ref_alt": "Reference input image",
-      "video_title": "Example",
-      "video_src": "qualitative_results/visual_06.mp4"
     },
     {
       "ref_caption": "Reference Image",
@@ -202,20 +174,6 @@
     },
     {
       "ref_caption": "Reference Image",
-      "ref_src": "images/11.png",
-      "ref_alt": "Reference input image",
-      "video_title": "Example",
-      "video_src": "qualitative_results/visual_11.mp4"
-    },
-    {
-      "ref_caption": "Reference Image",
-      "ref_src": "images/12.png",
-      "ref_alt": "Reference input image",
-      "video_title": "Example",
-      "video_src": "qualitative_results/visual_12.mp4"
-    },
-    {
-      "ref_caption": "Reference Image",
       "ref_src": "images/13.png",
       "ref_alt": "Reference input image",
       "video_title": "Example",
@@ -227,6 +185,50 @@
       "ref_alt": "Reference input image",
       "video_title": "Example",
       "video_src": "qualitative_results/visual_14.mp4"
+    }
+  ],
+  "qualitative_results_lmk": [
+    {
+      "ref_caption": "Reference Image",
+      "ref_src": "images/02.png",
+      "ref_alt": "Reference input image",
+      "video_title": "Example",
+      "video_src": "qualitative_results/visual_02.mp4"
+    },
+    {
+      "ref_caption": "Reference Image",
+      "ref_src": "images/04.png",
+      "ref_alt": "Reference input image",
+      "video_title": "Example",
+      "video_src": "qualitative_results/visual_04.mp4"
+    },
+    {
+      "ref_caption": "Reference Image",
+      "ref_src": "images/05.png",
+      "ref_alt": "Reference input image",
+      "video_title": "Example",
+      "video_src": "qualitative_results/visual_05.mp4"
+    },
+    {
+      "ref_caption": "Reference Image",
+      "ref_src": "images/06.png",
+      "ref_alt": "Reference input image",
+      "video_title": "Example",
+      "video_src": "qualitative_results/visual_06.mp4"
+    },
+    {
+      "ref_caption": "Reference Image",
+      "ref_src": "images/11.png",
+      "ref_alt": "Reference input image",
+      "video_title": "Example",
+      "video_src": "qualitative_results/visual_11.mp4"
+    },
+    {
+      "ref_caption": "Reference Image",
+      "ref_src": "images/12.png",
+      "ref_alt": "Reference input image",
+      "video_title": "Example",
+      "video_src": "qualitative_results/visual_12.mp4"
     }
   ]
 }

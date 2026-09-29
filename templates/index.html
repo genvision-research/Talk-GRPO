@@ -85,7 +85,7 @@
       margin: 0 auto 14px;
       max-width: 100%;
       color: var(--heading);
-      font-size: clamp(34px, 5vw, 58px);
+      font-size: clamp(30px, 5vw, 50px);
       line-height: 1.08;
       letter-spacing: -1.4px;
       font-weight: 800;
@@ -127,8 +127,8 @@
       min-width: 116px;
       padding: 10px 16px;
       border-radius: 999px;
-      background: #111827;
-      color: white;
+      background: #71e1ec;
+      color: rgb(38, 36, 36);
       font-size: 15px;
       font-weight: 700;
       box-shadow: var(--shadow);
@@ -137,7 +137,7 @@
 
     .button:hover {
       color: white;
-      background: #000000;
+      background: #289ea9;
       text-decoration: none;
       transform: translateY(-1px);
     }
@@ -194,6 +194,14 @@
       text-align: center;
     }
 
+    .section-content {
+      max-width: 100%;
+      color: var(--muted);
+      font-size: 17px;
+      margin-bottom: 24px;
+      text-align: justify;
+    }
+
     .teaser {
       margin-top: 34px;
       border-radius: var(--radius);
@@ -222,6 +230,7 @@
       border-radius: var(--radius);
       padding: 24px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.035);
+      text-align: justify;
     }
 
     .grid {
@@ -519,6 +528,36 @@
       display: block;
       width: 100%;
     }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 24px;
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .results-table th,
+    .results-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .results-table th {
+      font-weight: 700;
+    }
+
+    .ours-row {
+      background: rgba(28, 182, 196, 0.08);
+    }
   </style>
 </head>
 
@@ -526,15 +565,17 @@
   <header class="hero">
     <div class="container">
 
-      <h1><span class="title-highlight">Talk-GRPO</span>: Post-Training Talking-Face Generation via Landmark-Guided GRPO without Learned Synchronization Models</h1>
+      <h1><span class="title-highlight">Talk-GRPO</span>: Landmark-Conditioned GRPO Post-Training for Talking-Face Generation</h1>
 
       <div class="authors">
         <a href="#">Anonymous Authors</a>
       </div>
 
       <div class="link-row">
-        <a class="button" href="#">Paper</a>
-        <a class="button" href="#">Code</a>
+        <a class="button" href="#">📄 Paper</a>
+        <a class="button" href="#">⌘ Code</a>
+        <a class="button" href="assets/supp-material.pdf">⌁ Supplementary Material</a>
+        <a class="button" href="#bibtex">❞ BibTeX</a>
       </div>
 
       <div class="teaser">
@@ -555,6 +596,8 @@
       <a class="nav-link" href="#results">Test Videos</a>
       <a class="nav-link" href="#inputs">Reference Images</a>
       <a class="nav-link" href="#qualitative">Qualitative Results</a>
+      <a class="nav-link" href="#quantitative">Quantitative Results</a>
+      <a class="nav-link" href="#ablation">Ablation Study</a>
       <a class="nav-link" href="#bibtex">BibTeX</a>
     </div>
   </nav>
@@ -565,10 +608,7 @@
         <h2>Abstract</h2>
         <div class="abstract-box">
           <p>
-            Talking-face generation has recently advanced with diffusion-based frameworks. However, these models are commonly optimized with reconstruction objectives, which mainly improve visual quality rather than directly enhancing audio-lip synchronization. Existing methods often address this issue by introducing learned synchronization networks such as SyncNet. Although effective, such auxiliary networks are difficult to train and often provide black-box reward signals. In addition, this issue is more critical in diffusion-based generation, where facial details are still unclear and unreliable at early denoising steps. As a result, applying audio–lip synchronization supervision during these steps may introduce noisy guidance and degrade generation quality.
-          </p>
-          <p>
-            Motivated by these limitations, we propose <strong>Talk-GRPO</strong>, a post-training framework that formulates talking-face generation as a policy optimization problem and applies Group Relative Policy Optimization to optimize synchronization-oriented rewards at the final generation stage. Instead of relying on learned synchronization reward networks, Talk-GRPO uses lightweight and interpretable geometric cues derived from MediaPipe facial landmarks to construct a non-differentiable reward for audio-aware lip motion alignment. This design enables transparent reward computation and avoids black-box synchronization models. Experiments on multiple datasets demonstrate that Talk-GRPO consistently improves audio-lip synchronization for models with and without audio-lip synchronization losses, while preserving facial structure and temporal consistency.
+            Diffusion-based talking-face generation has achieved strong visual quality, yet reconstruction-oriented objectives do not explicitly optimize how accurately generated facial motion follows the landmark condition. Several studies introduce auxiliary losses to improve motion accuracy; however, diffusion models produce reliable visual structures mainly at later denoising steps. Applying such supervision to early noisy states may therefore provide inaccurate or misleading gradients and interfere with the original denoising objective. To address this mismatch, we propose <strong>Talk-GRPO</strong>, a reward-based post-training framework that evaluates the quality of the final generated output rather than imposing additional supervision throughout the denoising process. Given a reference image and driving facial landmarks, Talk-GRPO samples multiple candidate outputs and evaluates them using an explicit geometric reward derived from facial landmarks together with a perceptual preservation term. Group Relative Policy Optimization (GRPO) then converts these final-output rewards into relative advantages, enabling direct optimization of landmark fidelity without differentiating through the reward evaluator. We further refine the temporal-attention modules with timestep-adaptive perceptual supervision to improve temporal stability. Experiments on multiple datasets show that Talk-GRPO improves mouth-landmark fidelity and temporal consistency while preserving visual quality. In addition, under accurate full-landmark conditioning, Talk-GRPO outperforms supervised fine-tuning methods in the landmark-conditioned rendering stage while preserving reconstruction quality.
           </p>
         </div>
       </div>
@@ -586,24 +626,24 @@
           <div class="method-item">
             <strong>1. Group Generation</strong>
             <span>
-              Given the same reference image, landmark condition, and driving audio,
-              the generator samples a group of candidate.
+              Given the same reference image, driving landmarks, and audio condition,
+              the generator samples multiple candidate outputs.
             </span>
           </div>
 
           <div class="method-item">
-            <strong>2. Reward Computation</strong>
+            <strong>2. Final-Output Reward</strong>
             <span>
-              Landmarks are extracted from the final outputs to compute
-              geometry-based rewards for mouth alignment and visual preservation.
+              Each candidate is evaluated at the final generated state using
+              landmark-based mouth fidelity and perceptual preservation rewards.
             </span>
           </div>
 
           <div class="method-item">
             <strong>3. Two-Stage Post-Training</strong>
             <span>
-              Stage 1 applies GRPO with group-relative rewards, while Stage 2 refines
-              Temporal-Attention modules to improve consistency.
+              Stage 1 uses GRPO to improve landmark fidelity, while Stage 2 refines
+              temporal-attention modules to enhance temporal stability.
             </span>
           </div>
         </div>
@@ -660,8 +700,12 @@
       <div class="container">
         <h2>Qualitative Results</h2>
         <p class="section-lead">
-          We show qualitative examples with the reference image on the left and concatenated visualization videos on the right, illustrating the driving motion and generated talking-face results.
+          We showcase Talk-GRPO under two inference settings.
+          First, <strong>Landmark w/o Mouth</strong> removes mouth landmarks and relies on audio to generate mouth motion.
+          We then present the <strong>Full Landmark</strong> setting, where complete facial landmarks are used to directly guide the generated motion.
         </p>
+
+        <h2 style="text-align: center; color: #1cb6c4;">Landmark w/o Mouth</h2>
 
         <div class="qualitative-two-col">
           {% for item in data.qualitative_results %}
@@ -681,6 +725,415 @@
           </div>
           {% endfor %}
         </div>
+
+        <h2 style="text-align: center; margin-top: 20px; color: #1cb6c4;">Full Landmark</h2>
+
+        <div class="qualitative-two-col">
+          {% for item in data.qualitative_results_lmk %}
+          <div class="qualitative-group">
+            <div class="input-image">
+              <div class="caption">{{ item.ref_caption }}</div>
+              <img src="{{ item.ref_src }}" alt="{{ item.ref_alt }}" />
+            </div>
+
+            <div class="card qualitative-video-card concat-video">
+              <p class="video-title">{{ item.video_title }}</p>
+              <video controls muted loop playsinline>
+                <source src="{{ item.video_src }}" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section id="quantitative">
+      <div class="container">
+        <h2>Quantitative Results</h2>
+
+        <h3 style="text-align: center; margin-top: 40px;">
+          Comparison with Full-Frame Diffusion Baselines
+        </h3>
+
+        <p class="section-lead">
+          Talk-GRPO consistently improves landmark fidelity across
+          <strong>MEAD</strong>, <strong>HDTF</strong>, and <strong>CREMA-D</strong>,
+          achieving the lowest <strong>MLD</strong> on all three datasets.
+          It also provides strong reconstruction quality and the best temporal
+          consistency, while maintaining competitive audio-lip synchronization.
+        </p>
+
+        <div class="table-wrapper">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th rowspan="2">Dataset</th>
+                <th rowspan="2">Model</th>
+                <th>Landmark</th>
+                <th>Audio-Lip</th>
+                <th colspan="2">Reconstruction</th>
+                <th>Temporal</th>
+              </tr>
+              <tr>
+                <th>MLD ↓</th>
+                <th>LSE-D ↓</th>
+                <th>FID ↓</th>
+                <th>SSIM ↑</th>
+                <th>FLVD ↓</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!-- MEAD -->
+              <tr>
+                <td rowspan="4"><strong>MEAD</strong></td>
+                <td>Hallo2 <i>(ICLR'25)</i></td>
+                <td>31.254</td>
+                <td>8.379</td>
+                <td>36.698</td>
+                <td>78.109</td>
+                <td>10.073</td>
+              </tr>
+              <tr>
+                <td>MEMO <i>(TMLR'26)</i></td>
+                <td>32.423</td>
+                <td><strong>8.127</strong></td>
+                <td>29.806</td>
+                <td>84.207</td>
+                <td>8.506</td>
+              </tr>
+              <tr>
+                <td>EchoMimic <i>(AAAI'25)</i></td>
+                <td>31.992</td>
+                <td>9.257</td>
+                <td>33.667</td>
+                <td>86.212</td>
+                <td>6.626</td>
+              </tr>
+              <tr class="ours-row">
+                <td><strong>Talk-GRPO</strong></td>
+                <td><strong>29.621</strong></td>
+                <td>8.321</td>
+                <td><strong>25.746</strong></td>
+                <td><strong>90.448</strong></td>
+                <td><strong>6.213</strong></td>
+              </tr>
+
+              <!-- HDTF -->
+              <tr>
+                <td rowspan="4"><strong>HDTF</strong></td>
+                <td>Hallo2 <i>(ICLR'25)</i></td>
+                <td>29.345</td>
+                <td>8.381</td>
+                <td>33.744</td>
+                <td>68.793</td>
+                <td>9.427</td>
+              </tr>
+              <tr>
+                <td>MEMO <i>(TMLR'26)</i></td>
+                <td>40.614</td>
+                <td><strong>7.602</strong></td>
+                <td>35.494</td>
+                <td>70.835</td>
+                <td>9.689</td>
+              </tr>
+              <tr>
+                <td>EchoMimic <i>(AAAI'25)</i></td>
+                <td>27.703</td>
+                <td>8.694</td>
+                <td>31.899</td>
+                <td>76.918</td>
+                <td>8.824</td>
+              </tr>
+              <tr class="ours-row">
+                <td><strong>Talk-GRPO</strong></td>
+                <td><strong>27.545</strong></td>
+                <td>8.361</td>
+                <td><strong>23.650</strong></td>
+                <td><strong>86.730</strong></td>
+                <td><strong>8.600</strong></td>
+              </tr>
+
+              <!-- CREMA-D -->
+              <tr>
+                <td rowspan="4"><strong>CREMA-D</strong></td>
+                <td>Hallo2 <i>(ICLR'25)</i></td>
+                <td>32.742</td>
+                <td>8.011</td>
+                <td>39.525</td>
+                <td>73.753</td>
+                <td>8.157</td>
+              </tr>
+              <tr>
+                <td>MEMO <i>(TMLR'26)</i></td>
+                <td>40.061</td>
+                <td><strong>7.321</strong></td>
+                <td><strong>30.626</strong></td>
+                <td>76.433</td>
+                <td>7.857</td>
+              </tr>
+              <tr>
+                <td>EchoMimic <i>(AAAI'25)</i></td>
+                <td>33.873</td>
+                <td>8.007</td>
+                <td>39.442</td>
+                <td>78.814</td>
+                <td>6.811</td>
+              </tr>
+              <tr class="ours-row">
+                <td><strong>Talk-GRPO</strong></td>
+                <td><strong>31.896</strong></td>
+                <td>7.998</td>
+                <td>31.582</td>
+                <td><strong>85.975</strong></td>
+                <td><strong>6.411</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="section-content" style="margin-top: 20px;">
+          Compared with the pretrained EchoMimic backbone, Talk-GRPO improves
+          <strong>MLD, LSE-D, FID, SSIM, and FLVD</strong> across all three datasets,
+          showing that reward-based post-training improves landmark fidelity and
+          temporal stability without sacrificing reconstruction quality or
+          audio-lip synchronization.
+        </p>
+
+
+        <h3 style="text-align: center; margin-top: 40px;">
+          Comparison with Learned Auxiliary-Supervision Methods
+        </h3>
+
+        <p class="section-lead">
+          We further compare Talk-GRPO with methods using learned auxiliary supervision,
+          including AV-HuBERT and SyncNet. Landmark and reconstruction metrics are
+          evaluated on the lower facial region, while LSE-D is computed on the full face.
+        </p>
+
+        <div class="table-wrapper">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th rowspan="2">Dataset</th>
+                <th rowspan="2">Model</th>
+                <th rowspan="2">Loss</th>
+                <th rowspan="2">Mask</th>
+                <th rowspan="2">Size</th>
+                <th>Landmark</th>
+                <th>Audio-Lip</th>
+                <th colspan="2">Reconstruction</th>
+                <th>Temporal</th>
+              </tr>
+              <tr>
+                <th>MLD ↓</th>
+                <th>LSE-D ↓</th>
+                <th>FID ↓</th>
+                <th>SSIM ↑</th>
+                <th>FLVD ↓</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!-- MEAD -->
+              <tr>
+                <td rowspan="4"><strong>MEAD</strong></td>
+                <td>TalkLip</td>
+                <td>AV-HuBERT</td>
+                <td>Lower half</td>
+                <td>96×96</td>
+                <td>33.306</td>
+                <td>8.997</td>
+                <td>55.311</td>
+                <td>82.016</td>
+                <td>8.017</td>
+              </tr>
+
+              <tr>
+                <td>Diff2Lip</td>
+                <td>SyncNet</td>
+                <td>Lower half</td>
+                <td>128×128</td>
+                <td><u>26.515</u></td>
+                <td><u>8.733</u></td>
+                <td>36.665</td>
+                <td>79.077</td>
+                <td><u>6.354</u></td>
+              </tr>
+
+              <tr>
+                <td>EchoMimic</td>
+                <td>MSE+LPIPS</td>
+                <td>None</td>
+                <td>512×512</td>
+                <td>30.104</td>
+                <td>9.257</td>
+                <td><u>25.361</u></td>
+                <td><u>82.243</u></td>
+                <td>6.599</td>
+              </tr>
+
+              <tr class="ours-row">
+                <td><strong>Talk-GRPO</strong></td>
+                <td>Lmk+LPIPS</td>
+                <td>None</td>
+                <td>512×512</td>
+                <td><strong>25.764</strong></td>
+                <td><strong>8.321</strong></td>
+                <td><strong>24.293</strong></td>
+                <td><strong>83.575</strong></td>
+                <td><strong>6.245</strong></td>
+              </tr>
+
+              <!-- HDTF -->
+              <tr>
+                <td rowspan="4"><strong>HDTF</strong></td>
+                <td>TalkLip</td>
+                <td>AV-HuBERT</td>
+                <td>Lower half</td>
+                <td>96×96</td>
+                <td>31.313</td>
+                <td>8.881</td>
+                <td>23.053</td>
+                <td>83.467</td>
+                <td>9.609</td>
+              </tr>
+
+              <tr>
+                <td>Diff2Lip</td>
+                <td>SyncNet</td>
+                <td>Lower half</td>
+                <td>128×128</td>
+                <td><u>24.427</u></td>
+                <td>8.844</td>
+                <td><strong>18.260</strong></td>
+                <td>82.325</td>
+                <td><strong>7.080</strong></td>
+              </tr>
+
+              <tr>
+                <td>EchoMimic</td>
+                <td>MSE+LPIPS</td>
+                <td>None</td>
+                <td>512×512</td>
+                <td>24.936</td>
+                <td><u>8.694</u></td>
+                <td>25.607</td>
+                <td><strong>85.583</strong></td>
+                <td>8.516</td>
+              </tr>
+
+              <tr class="ours-row">
+                <td><strong>Talk-GRPO</strong></td>
+                <td>Lmk+LPIPS</td>
+                <td>None</td>
+                <td>512×512</td>
+                <td><strong>24.313</strong></td>
+                <td><strong>8.361</strong></td>
+                <td><u>22.140</u></td>
+                <td><u>85.140</u></td>
+                <td><u>8.369</u></td>
+              </tr>
+
+              <!-- CREMA-D -->
+              <tr>
+                <td rowspan="4"><strong>CREMA-D</strong></td>
+                <td>TalkLip</td>
+                <td>AV-HuBERT</td>
+                <td>Lower half</td>
+                <td>96×96</td>
+                <td>33.376</td>
+                <td><strong>7.843</strong></td>
+                <td>37.032</td>
+                <td>81.636</td>
+                <td>7.138</td>
+              </tr>
+
+              <tr>
+                <td>Diff2Lip</td>
+                <td>SyncNet</td>
+                <td>Lower half</td>
+                <td>128×128</td>
+                <td><u>24.494</u></td>
+                <td><u>7.955</u></td>
+                <td>36.111</td>
+                <td>79.761</td>
+                <td><strong>5.451</strong></td>
+              </tr>
+
+              <tr>
+                <td>EchoMimic</td>
+                <td>MSE+LPIPS</td>
+                <td>None</td>
+                <td>512×512</td>
+                <td>29.869</td>
+                <td>8.007</td>
+                <td><u>30.875</u></td>
+                <td><u>81.651</u></td>
+                <td>6.528</td>
+              </tr>
+
+              <tr class="ours-row">
+                <td><strong>Talk-GRPO</strong></td>
+                <td>Lmk+LPIPS</td>
+                <td>None</td>
+                <td>512×512</td>
+                <td><strong>24.082</strong></td>
+                <td>7.998</td>
+                <td><strong>30.134</strong></td>
+                <td><strong>81.795</strong></td>
+                <td><u>6.214</u></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="section-content" style="margin-top: 20px;">
+          Despite not using a learned audio-visual synchronization objective,
+          Talk-GRPO achieves the best landmark fidelity on all three datasets while
+          maintaining competitive audio-lip alignment. It also generates full-face
+          512×512 outputs with strong reconstruction and temporal quality.
+        </p>
+      </div>
+
+      
+    </section>
+
+    <section id="ablation">
+      <div class="container">
+        <h2>Ablation Studies</h2>
+
+        <div class="ablation-block">
+
+          <p class="section-lead">
+            We analyze the contribution of each training stage to landmark fidelity
+            and temporal stability. Stage 1 primarily improves landmark fidelity
+            through GRPO post-training, while Stage 2 mainly enhances temporal
+            consistency through temporal-attention refinement.
+          </p>
+
+          <div class="figure-card">
+            <img
+              src="assets/ablation.png"
+              alt="Stage-wise analysis of Talk-GRPO using MLD and FLVD"
+            />
+
+          </div>
+
+          <p class="section-content">
+            For landmark fidelity, most of the MLD improvement is already obtained
+            in Stage 1. GRPO post-training reduces MLD by approximately
+            <strong>15.6%</strong> on MEAD and <strong>20.2%</strong> on HDTF,
+            while CREMA-D shows a smaller reduction of about <strong>6.1%</strong>.
+            In contrast, Stage 1 contributes only minor improvements to temporal
+            consistency, while Stage 2 reduces FLVD by more than
+            <strong>40%</strong> on all three datasets. These results show the
+            complementary roles of the two stages: Stage 1 mainly improves landmark
+            fidelity, whereas Stage 2 is responsible for most of the temporal gain.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -688,7 +1141,7 @@
       <div class="container">
         <h2>BibTeX</h2>
         <pre class="bibtex"><code>@article{talkgrpo2026,
-          title={Talk-GRPO: Post-Training Talking-Face Generation via Landmark-Guided GRPO without Learned Synchronization Models},
+          title={Talk-GRPO: Landmark-Conditioned GRPO Post-Training for Talking-Face Generation},
           author={Anonymous Authors},
           journal={arXiv},
           year={2026}
